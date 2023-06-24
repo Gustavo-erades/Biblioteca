@@ -10,21 +10,22 @@ import re
 import regex_biblioteca
 #abre o banco de dados e cria as tabelas
 try:
+    pastaApp=os.path.dirname(__file__)
     tabela_livro='''CREATE TABLE IF NOT EXISTS Livro(
                     nome TEXT NOT NULL,
                     status TEXT,
                     categoria TEXT NOT NULL,
                     autor TEXT NOT NULL,
-                    data_alug DATE,
-                    data_entrega DATE,
+                    data_alug TEXT,
+                    data_entrega TEXT,
                     id INTEGER NOT NULL,
                     PRIMARY KEY(id)
                     );'''
     tabela_pessoa='''CREATE TABLE IF NOT EXISTS Pessoa(
-                    cpf INTEGER NOT NULL,
-                    id_livro INTEGER NOT NULL,
+                    cpf TEXT NOT NULL,
+                    id_livro TEXT NOT NULL,
                     nome TEXT NOT NULL,
-                    contato INTEGER NOT NULL,
+                    contato TEXT NOT NULL,
                     PRIMARY KEY(cpf),
                     FOREIGN KEY (id_livro) REFERENCES Livro(id)
                     );'''
@@ -68,35 +69,44 @@ try:
     val=randint(100,1000)
     def cont_abaCadastro():
         if (Nome.get()!="" and categoria.get()!="" and autor.get()!=""):
-            vnome=str(Nome.get())
-            vcategoria=str(categoria.get())
-            vautor=str(autor.get())
-            vquery="INSERT INTO Livro(nome,categoria,autor,id) VALUES('"+vnome+"','"+vcategoria+"','"+vautor+"','"+str(val)+"');"
-            banco.dml(vquery)
-            mb.showinfo("Sucesso :)","Livro cadastrado com sucesso!")
+            if(regex_biblioteca.validanome(Nome.get()) and regex_biblioteca.validanome(autor.get())):
+                vnome=str(Nome.get())
+                vcategoria=str(categoria.get())
+                vautor=str(autor.get())
+                vquery="INSERT INTO Livro(nome,categoria,autor,id) VALUES('"+vnome+"','"+vcategoria+"','"+vautor+"','"+str(val)+"');"
+                banco.dml(vquery)
+                mb.showinfo("Sucesso :)","Livro cadastrado com sucesso!")
+            else:
+                mb.showwarning("ATENÇÃO","Os campos de 'Nome do livro' e 'Nome do autor(a)' devem começar com letra Maiúscula")
         else:
-            mb.showerror("Erro :(","Tanto o nome quanto a categoria do livro devem ser preenchidas!")
+            mb.showerror("Erro :(","Todos os campos devem ser preenchidos!")
     def cont_abaEmprestar():
         if (Nome_pessoa.get()!="" and cpf_pessoa.get()!="" and contato_pessoa.get()!="" 
             and ID_livro.get()!="" and data_emprestimo.get()!="" and data_entrega.get()!=""):
-            if(regex_biblioteca.validatelefone(contato_pessoa.get())):
-                #pega nome, cpf e contato da pessoa
-                vnome=str(Nome_pessoa.get())
-                vcpf=str(cpf_pessoa.get())
-                vcontato=str(contato_pessoa.get())
-                vid_livro=str(ID_livro.get())
-                vdata_emprestimo=str(data_emprestimo.get())
-                vdata_entrega=str(data_entrega.get())
-                vquery="INSERT INTO Pessoa(cpf,id_livro,nome,contato) VALUES('"+vcpf+"','"+vid_livro+"','"+vnome+"','"+vcontato+"');"
-                banco.dml(vquery)
-                #atualiza status do livro emprestado
-                atualiza_status="UPDATE Livro SET status='Alugado', data_alug='"+vdata_emprestimo+"', data_entrega='"+vdata_entrega+"' WHERE id='"+vid_livro+"';"
-                banco.dml(atualiza_status)
-                mb.showinfo("Sucesso :)","%s tem até %s para entregar o livro!"%(vnome,vdata_entrega))
+            if(regex_biblioteca.validatelefone(contato_pessoa.get()) and regex_biblioteca.validacpf(cpf_pessoa.get()) and 
+               regex_biblioteca.validanome(Nome_pessoa.get()) and regex_biblioteca.validaid(ID_livro.get()) and 
+               regex_biblioteca.validadata(data_emprestimo.get()) and regex_biblioteca.validadata(data_entrega.get())):
+                comando="SELECT nome FROM Livro WHERE id='"+str(ID_livro.get())+"';"
+                if(banco.dql(comando)):
+                    #pega nome, cpf e contato da pessoa
+                    vnome=str(Nome_pessoa.get())
+                    vcpf=str(cpf_pessoa.get())
+                    vcontato=str(contato_pessoa.get())
+                    vid_livro=str(ID_livro.get())
+                    vdata_emprestimo=str(data_emprestimo.get())
+                    vdata_entrega=str(data_entrega.get())
+                    vquery="INSERT INTO Pessoa(cpf,id_livro,nome,contato) VALUES('"+vcpf+"','"+vid_livro+"','"+vnome+"','"+vcontato+"');"
+                    banco.dml(vquery)
+                    #atualiza status do livro emprestado
+                    atualiza_status="UPDATE Livro SET status='Alugado', data_alug='"+vdata_emprestimo+"', data_entrega='"+vdata_entrega+"' WHERE id='"+vid_livro+"';"
+                    banco.dml(atualiza_status)
+                    mb.showinfo("Sucesso :)","%s tem até %s para entregar o livro!"%(vnome,vdata_entrega))
+                else:
+                    mb.showerror("ERRO :(","O livro de id: '"+str(ID_livro.get())+"' não existe!")
             else:
-                mb.showwarning("ATENÇÃO","O campo de contato deve está no formato: (99) 99999-9999")
+                mb.showwarning("ATENÇÃO","O campos devem ser preenchidos da seguinte forma:\n*Nome começando com Letra maiúscula*\n*CPF: 000.000.000-00*\n*Contato:(99) 99999-9999\n*Id até cinco caracteres, contendo letras ou números*\n*Data: 00/00/0000 ou 00-00-0000")
         else:
-            mb.showerror("Erro :(","Todos os campos devem ser preenchidos!")
+            mb.showerror("ERRO :(","Todos os campos devem ser preenchidos!")
     def janela_deletar():
         janela_deletar=tk.Tk()
         janela_deletar.title("Biblioteca- Deleção de Livro")
@@ -113,14 +123,22 @@ try:
         tk.Button(janela_deletar,text="Deletar",pady=1,command=verificacao_deletar,bg="#4682B4",fg="#fff",font="Arial 12 bold").pack()
     def janela_devolucao():
         if(Nome_pessoaDevolucao.get()!="" and cpf_pessoaDevolucao.get()!="" and id_livroDevolucao.get()!=""):
-            nome=str(Nome_pessoaDevolucao.get())
-            cpf=str(cpf_pessoaDevolucao.get())
-            idLivro=str(id_livroDevolucao.get())
-            excluirPessoa="DELETE FROM Pessoa WHERE cpf='"+cpf+"' and nome='"+nome+"';"
-            banco.dml(excluirPessoa)
-            mudarStatusLivro="UPDATE Livro SET status='',data_alug='',data_entrega='' WHERE id='"+idLivro+"';"
-            banco.dml(mudarStatusLivro)
-            mb.showinfo("Sucesso :)","Livro devolvido com sucesso!")
+            if(regex_biblioteca.validanome(Nome_pessoaDevolucao.get()) and regex_biblioteca.validacpf(cpf_pessoaDevolucao.get())
+               and regex_biblioteca.validaid(id_livroDevolucao.get())):
+                nome=str(Nome_pessoaDevolucao.get())
+                cpf=str(cpf_pessoaDevolucao.get())
+                idLivro=str(id_livroDevolucao.get())
+                comando="SELECT status FROM Livro WHERE id='"+idLivro+"';"
+                if(banco.dql(comando)!=[('',)] or banco.dql(comando)!=[(None,)]):
+                    excluirPessoa="DELETE FROM Pessoa WHERE cpf='"+cpf+"' and nome='"+nome+"';"
+                    banco.dml(excluirPessoa)
+                    mudarStatusLivro="UPDATE Livro SET status='',data_alug='',data_entrega='' WHERE id='"+idLivro+"';"
+                    banco.dml(mudarStatusLivro)
+                    mb.showinfo("Sucesso :)","Livro devolvido com sucesso!")
+                else:
+                    mb.showerror("Erro :(","Esse Livro não foi alugado!")
+            else:
+                mb.showwarning("ATENÇÃO","O campos devem ser preenchidos da seguinte forma:\n*Nome começando com Letra maiúscula*\n*CPF: 000.000.000-00*\n*Id até cinco caracteres, contendo letras ou números*")
         else:
             mb.showerror("Erro :(","Todos os campos devem ser preenchidos")
     def documentacao():
@@ -128,6 +146,27 @@ try:
         janela_documentacao.title("Biblioteca- Documentação")
         centralizar_janela(janela_documentacao,500,300)
         janela_documentacao.configure(background="#dde")
+    def gerarConsultas():
+        query_Livro="SELECT * FROM Livro,Pessoa WHERE status='Alugado';"
+        resultado=banco.dql(query_Livro)
+        if(resultado!=[]):
+            for i in resultado:
+                lista=(i)
+                with open(""+pastaApp+"\\Consultas_Biblioteca.txt","w",encoding="UTF-8") as f:
+                    f.write("%s(contato:%s) alugou %s(categoria:%s | id:%s) em %s \n\n"%(lista[9],lista[10],lista[0],lista[2],lista[6],lista[4]))
+            mb.showinfo("Consulta feita :)","O arquivo com a lista dos livros alugados está na mesma pasta desse programa ")
+        else:
+            mb.showerror("ERRO :)","Não há nehum livro alugado até o momento!")
+    def GerarBancoTxt():
+        queryBancoLivros="SELECT * FROM Livro ORDER BY id"
+        resultadoTodos=banco.dql(queryBancoLivros)
+        if(resultadoTodos!=[]):
+            for i in resultadoTodos:
+                lista=(i)
+                with open(""+pastaApp+"\\Livros_Cadastrados.txt","w",encoding="UTF-8") as f:
+                    f.write("Livro:%s | Categoria:%s | Autor:%s | ID:%s"%(lista[0],lista[2],lista[3],lista[6]))
+                    f.write("\n\n")
+            mb.showinfo("Banco gerado com sucesso :)","O arquivo com a lista dos livros cadastrados está na mesma pasta desse programa ")      
     #cria a janela e define título
     janela = tk.Tk()
     janela.title("Biblioteca")
@@ -147,8 +186,8 @@ try:
     #criar menu
     barraDeMenu=tk.Menu(janela)
     menuCRUD=tk.Menu(barraDeMenu, tearoff=0)
+    menuCRUD.add_command(label="Gerar Banco",command=GerarBancoTxt)
     menuCRUD.add_command(label="Zerar Banco",command=janela_deletar)
-    menuCRUD.add_command(label="Gerar Banco",command=janela_deletar)
     menuCRUD.add_separator()
     menuCRUD.add_command(label="sair",command=verificacao_sair)
     barraDeMenu.add_cascade(label="Menu",menu=menuCRUD)
@@ -173,9 +212,6 @@ try:
     #aba de devolução
     devolucao_aba=ttk.Frame(noteb)
     noteb.add(devolucao_aba,text="Devolução")
-    #aba de exclusão
-    excluir_aba=ttk.Frame(noteb)
-    noteb.add(excluir_aba,text="Excluir Livro")
     #conteúdo aba de pesquisa
 #caixa com a listagem dos livros
     quadroGrid=tk.LabelFrame(pesquisar_aba,text="Livros")
@@ -197,7 +233,9 @@ try:
     tv.heading('id',text="id")
     tv.pack()
     popularGrid()
-    tk.Button(quadroGrid,text="Consultar",pady=1,command=semComando,bg="#363636",fg="#fff",font="Arial 12 bold").pack(pady="5")
+    tk.Button(quadroGrid,text="Consultar",pady=1,command=semComando,bg="#363636",fg="#fff",font="Arial 12 bold").pack(side="left",padx=5)
+    tk.Button(quadroGrid,text="Gerar consultas",pady=1,command=gerarConsultas,bg="#363636",fg="#fff",font="Arial 12 bold").pack(side="left",padx=5)
+    tk.Button(quadroGrid,text="Excluir Livro",pady=1,command=semComando,bg="#363636",fg="#fff",font="Arial 12 bold").pack(side="left",padx=5)
     #campo de pesquisa
     quadroPesquisa=tk.LabelFrame(pesquisar_aba,text="Procurar")
     quadroPesquisa.pack(fill="both",expand="yes",padx=10,pady=10)
@@ -218,7 +256,7 @@ try:
     valor=tk.StringVar()
     tk.Label(quadroCadastro,text="Selecione a categoria",font="Arial 12 bold").pack()
     categoria=ttk.Combobox(quadroCadastro,width=27,textvariable=valor)
-    categorias_cadastradas="SELECT categoria FROM livro"
+    categorias_cadastradas="SELECT DISTINCT categoria FROM livro"
     resultado=banco.dql(categorias_cadastradas)
     categoria['values']=resultado
     categoria.pack()
@@ -244,7 +282,7 @@ try:
     cpf_pessoa.pack(padx=8,pady=8)
     #contato da pessoa
     contato_pessoa=tk.Entry(quadroEmprestaPessoa,width=50)
-    tk.Label(quadroEmprestaPessoa,text="Contato:",font="Arial 12 bold").pack()
+    tk.Label(quadroEmprestaPessoa,text="Telefone para Contato:",font="Arial 12 bold").pack()
     contato_pessoa.pack(padx=8,pady=8)
     #dados do livro emprestado
     quadroEmprestaLivro=tk.LabelFrame(Emprestar_aba,text="Dados Livro")
@@ -273,16 +311,22 @@ try:
     quadroDevolveLivro=tk.LabelFrame(devolucao_aba,text="Devolução de Livro")
     quadroDevolveLivro.pack(fill="none",expand="no",padx=10,pady=10)
     Nome_pessoaDevolucao=tk.Entry(quadroDevolveLivro,width=50)
-    tk.Label(quadroDevolveLivro,text="Nome:",font="Arial 12 bold",bg="#00FF00").pack()
+    tk.Label(quadroDevolveLivro,text="Nome:",font="Arial 12 bold").pack()
     Nome_pessoaDevolucao.pack(padx=8,pady=8)
         
     cpf_pessoaDevolucao=tk.Entry(quadroDevolveLivro,width=50)
-    tk.Label(quadroDevolveLivro,text="CPF:",font="Arial 12 bold",bg="#00FF00").pack()
+    tk.Label(quadroDevolveLivro,text="CPF:",font="Arial 12 bold").pack()
     cpf_pessoaDevolucao.pack(padx=8,pady=8)
-        
-    id_livroDevolucao=tk.Entry(quadroDevolveLivro,width=15)
-    tk.Label(quadroDevolveLivro,text="ID do livro:",font="Arial 12 bold",bg="#00FF00").pack()
+
+    valor_ids=tk.StringVar()
+    tk.Label(quadroDevolveLivro,text="ID do livro",font="Arial 12 bold").pack()
+    id_livroDevolucao=ttk.Combobox(quadroDevolveLivro,width=15,textvariable=valor_ids)
+    procura_ids="SELECT id FROM Livro"
+    result_ids=banco.dql(procura_ids)
+    id_livroDevolucao['values']=result_ids
     id_livroDevolucao.pack(padx=8,pady=8)
+    id_livroDevolucao.current()
+    
     #botão que efetiva a devolução
     tk.Button(quadroDevolveLivro,text="Entregue",pady=1,command=janela_devolucao,bg="#363636",fg="#fff",font="Arial 12 bold").pack(pady=8)
 except conector.DatabaseError as erro:
