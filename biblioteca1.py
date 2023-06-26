@@ -143,7 +143,7 @@ try:
                 cpf=str(cpf_pessoaDevolucao.get())
                 idLivro=str(id_livroDevolucao.get())
                 comando="SELECT status FROM Livro WHERE id='"+idLivro+"';"
-                if(banco.dql(comando)!=[('',)] or banco.dql(comando)!=[(None,)]):
+                if(banco.dql(comando)!=[('',)] and banco.dql(comando)!=[(None,)]):
                     excluirPessoa="DELETE FROM Pessoa WHERE cpf='"+cpf+"' and nome='"+nome+"';"
                     banco.dml(excluirPessoa)
                     mudarStatusLivro="UPDATE Livro SET status='',data_alug='',data_entrega='' WHERE id='"+idLivro+"';"
@@ -157,9 +157,24 @@ try:
             mb.showerror("Erro :(","Todos os campos devem ser preenchidos")
     def documentacao():
         janela_documentacao=tk.Tk()
-        janela_documentacao.title("Biblioteca- Documentação")
-        centralizar_janela(janela_documentacao,500,300)
+        janela_documentacao.title("Biblioteca- Documentação - README")
+        centralizar_janela(janela_documentacao,600,400)
         janela_documentacao.configure(background="#dde")
+        '''
+        quadro_documentacao=tk.LabelFrame(janela_documentacao,text="Documentação")
+        quadro_documentacao.pack(fill="x",expand="yes",padx=10,pady=10,side="top")
+        '''
+        barra_rolagemY=tk.Scrollbar(janela_documentacao)
+        barra_rolagemY.pack(side="right",fill="y")
+        
+        texto=tk.Text(janela_documentacao, yscrollcommand=barra_rolagemY.set,width=600,height=400)
+        with open(""+pastaApp+"\\README.txt","r") as f:
+            linhas=f.readlines()
+            for linha in linhas:
+                linhas=[linha.rstrip('\n') ]
+                texto.insert(tk.END,linha)
+        texto.pack()
+        barra_rolagemY.config(command=texto.yview)
     def gerarConsultas():
         query_Livro="SELECT * FROM Livro,Pessoa WHERE status='Alugado';"
         resultado=banco.dql(query_Livro)
@@ -170,7 +185,7 @@ try:
                     f.write("%s(contato:%s) alugou %s(categoria:%s | id:%s) em %s \n\n"%(lista[9],lista[10],lista[0],lista[2],lista[6],lista[4]))
             mb.showinfo("Consulta feita :)","O arquivo com a lista dos livros alugados está na mesma pasta desse programa ")
         else:
-            mb.showerror("ERRO :)","Não há nehum livro alugado até o momento!")
+            mb.showerror("ERRO :)","Não há nenhum livro alugado até o momento!")
     def GerarBancoTxt():
         queryBancoLivros="SELECT * FROM Livro ORDER BY id"
         resultadoTodos=banco.dql(queryBancoLivros)
