@@ -6,7 +6,6 @@ from tkinter import messagebox as mb
 import os
 from random import *
 import banco
-import re
 import regex_biblioteca
 #abre o banco de dados e cria as tabelas
 try:
@@ -42,6 +41,8 @@ try:
         nomeDaJanela.resizable(False,False)
     def semComando():
         print("sem comando")
+    def refresh():
+        tk.mainloop()
     def verificacao_sair():
         if mb.askyesno("Verificação", "Deseja realmente sair?"):
             janela.quit()
@@ -75,7 +76,7 @@ try:
                 vautor=str(autor.get())
                 vquery="INSERT INTO Livro(nome,categoria,autor,id) VALUES('"+vnome+"','"+vcategoria+"','"+vautor+"','"+str(val)+"');"
                 banco.dml(vquery)
-                mb.showinfo("Sucesso :)","Livro cadastrado com sucesso!")
+                mb.showinfo("Sucesso :)","Livro cadastrado com sucesso!\n\n*OBS: caso tenha sido cadastrado uma nova categoria ela estará disponível na próxima inicialização do programa, assim como o número ID do livro cadastrado.*")
             else:
                 mb.showwarning("ATENÇÃO","Os campos de 'Nome do livro' e 'Nome do autor(a)' devem começar com letra Maiúscula")
         else:
@@ -107,20 +108,33 @@ try:
                 mb.showwarning("ATENÇÃO","O campos devem ser preenchidos da seguinte forma:\n*Nome começando com Letra maiúscula*\n*CPF: 000.000.000-00*\n*Contato:(99) 99999-9999\n*Id até cinco caracteres, contendo letras ou números*\n*Data: 00/00/0000 ou 00-00-0000")
         else:
             mb.showerror("ERRO :(","Todos os campos devem ser preenchidos!")
-    def janela_deletar():
-        janela_deletar=tk.Tk()
-        janela_deletar.title("Biblioteca- Deleção de Livro")
-        centralizar_janela(janela_deletar,500,300)
-        janela_deletar.configure(background="#dde")
-        #encontrar livro
-        livro=tk.StringVar()
-        tk.Label(janela_deletar,text="Encontrar livro",font="Arial 12 bold",bg="#FFFF00").pack()
-        categoria=ttk.Combobox(janela_deletar,width=27,textvariable=livro)
-        categoria['values']=('ainda nada :(')
-        categoria.pack()
-        categoria.current()
-        #botão de cadastro
-        tk.Button(janela_deletar,text="Deletar",pady=1,command=verificacao_deletar,bg="#4682B4",fg="#fff",font="Arial 12 bold").pack()
+    def zera_banco():
+        if(mb.askyesno("ATENÇÃO","Ao zerar o banco todos os dados de livros cadastrados e de empréstimos feitos serão perdidos! Deseja realmente zerar o banco?")):
+            comando_garantia="SELECT * FROM Livro WHERE status='Alugado'"
+            garantia=banco.dml(comando_garantia)
+            if garantia==[] or garantia==None:
+                os.mkdir(pastaApp+"\\Biblioteca_backup")
+                comando_sensatoLivro="SELECT * FROM Livro ORDER BY ID"
+                resultado_sensatoLivro=banco.dql(comando_sensatoLivro)
+                if(resultado_sensatoLivro!=[]):   
+                    with open(""+pastaApp+"\\Biblioteca_backup\\backup_Livros_Registrados.txt","w",encoding="UTF-8") as f:
+                            f.write("\t--- BACKUP DOS LIVROS CADASTRADOS ---\n\n")
+                            for i in resultado_sensatoLivro:
+                                lista_populaArq=(i)
+                                f.write("Livro: %s | Autor: %s | Categoria: %s | ID: %s\n"%(lista_populaArq[0],lista_populaArq[3],lista_populaArq[2],lista_populaArq[6]))
+                    comando_insanidade1="DELETE FROM Pessoa"
+                    banco.dml(comando_insanidade1)
+                    comando_insanidade2="DELETE FROM Livro"
+                    banco.dml(comando_insanidade2)
+                    tv.delete(*tv.get_children())
+                    mb.showinfo("Operação realizada com sucesso!","Caso seja necessário, uma pasta de backup foi criada na mesma pasta desse prorama!")   
+                else:
+                    mb.showerror("Erro!","Não há livros cadastrados na biblioteca ainda!") 
+            else:
+                mb.showerror("Erro!","Há ao menos um livro ainda não devolvido. Por isso os registros da biblioteca não podem ser zerados!")   
+                print(garantia)
+        else:
+            mb.showinfo("Operação cancelada!","A operação de 'Zerar banco' foi cancelada!")
     def janela_devolucao():
         if(Nome_pessoaDevolucao.get()!="" and cpf_pessoaDevolucao.get()!="" and id_livroDevolucao.get()!=""):
             if(regex_biblioteca.validanome(Nome_pessoaDevolucao.get()) and regex_biblioteca.validacpf(cpf_pessoaDevolucao.get())
@@ -167,6 +181,56 @@ try:
                     f.write("Livro:%s | Categoria:%s | Autor:%s | ID:%s"%(lista[0],lista[2],lista[3],lista[6]))
                     f.write("\n\n")
             mb.showinfo("Banco gerado com sucesso :)","O arquivo com a lista dos livros cadastrados está na mesma pasta desse programa ")      
+    def Deleta_Livro():
+        try:
+            livroSelecionado=tv.selection()
+            Lista_delete=[]
+            for i in tv.item(livroSelecionado,'values'):
+                Lista_delete.append(str(i))
+            if mb.askyesno("ATENÇÃO", "Deseja realmente deletar o livro '"+Lista_delete[0]+"'?"):
+                if(Lista_delete[1]!='Alugado'):
+                    comando_deletar="DELETE FROM Livro WHERE id='"+Lista_delete[6]+"'"
+                    banco.dml(comando_deletar)
+                    if(banco.dml(comando_deletar)):
+                        tv.delete(livroSelecionado)
+                        mb.showinfo("Sucesso :)","Livro deletado com sucesso!")
+                else:
+                    mb.showerror("Erro!","O Livro'"+Lista_delete[0]+"' está alugado até '"+Lista_delete[5]+"' ")
+        except:
+            mb.showerror("Erro!","Selecione algum livro para que ele possa ser deletado da biblioteca.")
+    def QuemAlugou():
+        try:
+            livroSelecionado=tv.selection()
+            Lista_Consulta=[]
+            for i in tv.item(livroSelecionado,'values'):
+                Lista_Consulta.append(str(i))
+            if Lista_Consulta[1]=='Alugado':
+                
+                janela_consulta=tk.Tk()
+                janela_consulta.title("Biblioteca- Consultar empréstimo")
+                centralizar_janela(janela_consulta,500,300)
+                janela_consulta.configure(background="#dde")                           
+                query_quem="SELECT * FROM Pessoa WHERE id_livro='"+Lista_Consulta[6]+"';"
+                resultado_quem=banco.dql(query_quem)
+                for i in resultado_quem:
+                    lista_quem=(i)   
+                texto=tk.LabelFrame(janela_consulta,text="Dados da Pessoa")
+                texto.pack(fill="both",expand="yes",padx=10,pady=10,side="top")
+                tk.Label(texto,text="Nome: "+lista_quem[2]+"",font="Arial 12 bold").pack()
+                tk.Label(texto,text="Contato: "+lista_quem[3]+"",font="Arial 12 bold").pack()
+                tk.Label(texto,text="CPF: "+lista_quem[0]+"",font="Arial 12 bold").pack()
+                
+                texto_nomeLivro=tk.LabelFrame(janela_consulta,text="Dados do Livro")
+                texto_nomeLivro.pack(fill="y",expand="yes",padx=10,pady=10,side="left")
+                tk.Label(texto_nomeLivro,text="Nome do Livro: "+Lista_Consulta[0]+"",font="Arial 12 bold").pack()
+                texto_idLivro=tk.LabelFrame(janela_consulta,text="Dados do Livro")
+                texto_idLivro.pack(fill="y",expand="yes",padx=10,pady=10,side="left")
+                tk.Label(texto_idLivro,text="ID: "+Lista_Consulta[6]+"",font="Arial 12 bold").pack()
+            else:
+                mb.showerror("Erro!","O livro '"+Lista_Consulta[0]+"' não foi emprestado ainda")
+        except:
+            mb.showerror("Erro!","Selecione algum livro para que a consulta possa ser feita.")
+        
     #cria a janela e define título
     janela = tk.Tk()
     janela.title("Biblioteca")
@@ -187,7 +251,7 @@ try:
     barraDeMenu=tk.Menu(janela)
     menuCRUD=tk.Menu(barraDeMenu, tearoff=0)
     menuCRUD.add_command(label="Gerar Banco",command=GerarBancoTxt)
-    menuCRUD.add_command(label="Zerar Banco",command=janela_deletar)
+    menuCRUD.add_command(label="Zerar Banco",command=zera_banco)
     menuCRUD.add_separator()
     menuCRUD.add_command(label="sair",command=verificacao_sair)
     barraDeMenu.add_cascade(label="Menu",menu=menuCRUD)
@@ -233,9 +297,9 @@ try:
     tv.heading('id',text="id")
     tv.pack()
     popularGrid()
-    tk.Button(quadroGrid,text="Consultar",pady=1,command=semComando,bg="#363636",fg="#fff",font="Arial 12 bold").pack(side="left",padx=5)
+    tk.Button(quadroGrid,text="Consultar",pady=1,command=QuemAlugou,bg="#363636",fg="#fff",font="Arial 12 bold").pack(side="left",padx=5)
     tk.Button(quadroGrid,text="Gerar consultas",pady=1,command=gerarConsultas,bg="#363636",fg="#fff",font="Arial 12 bold").pack(side="left",padx=5)
-    tk.Button(quadroGrid,text="Excluir Livro",pady=1,command=semComando,bg="#363636",fg="#fff",font="Arial 12 bold").pack(side="left",padx=5)
+    tk.Button(quadroGrid,text="Excluir Livro",pady=1,command=Deleta_Livro,bg="#363636",fg="#fff",font="Arial 12 bold").pack(side="left",padx=5)
     #campo de pesquisa
     quadroPesquisa=tk.LabelFrame(pesquisar_aba,text="Procurar")
     quadroPesquisa.pack(fill="both",expand="yes",padx=10,pady=10)
@@ -267,7 +331,6 @@ try:
     autor.pack()
     #botão de cadastro
     tk.Button(quadroCadastro,text="Cadastrar",pady=1,command=cont_abaCadastro,bg="#363636",fg="#fff",font="Arial 12 bold").pack(side="bottom",pady=8)
-    
     #conteúdo aba de empréstimo
     #dados da pessoa
     #nome da pessoa
