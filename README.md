@@ -10,9 +10,13 @@
 #### Ao selecionar uma tupla(linha) na caixa dos registros listados e clicar em ‘consultar’ uma nova janela será apresentada mostrando os dados da pessoa que alugou aquele livro.
 
 ### -Gerar consultas:
+![gerar2](https://github.com/Gustavo-erades/Biblioteca/assets/108373134/d54b09f3-1c87-4779-8a67-b0d56b397c81)
+
 #### Ao clicar nesse botão um arquivo de texto será criado e alocado na mesma pasta que o programa está. Esse arquivo de texto contém os dados de todas as pessoas que estão com livros alugados e também diz que livros são esses.
 
 ### -Excluir livro:
+![excluir](https://github.com/Gustavo-erades/Biblioteca/assets/108373134/86d053f5-d0fe-4aa2-aa3b-bb0221c039da)
+
 #### Ao selecionar uma tupla(linha) na caixa dos registros listados e clicar em ‘Excluir livro’, o livro selecionado será deletado do banco de dados da Biblioteca. Essa função só será possível caso o livro selecionado não esteja alugado
 
 ### -Pesquisar:
@@ -58,6 +62,15 @@
 ![menu](https://github.com/Gustavo-erades/Biblioteca/assets/108373134/acd0fd08-42a0-4d06-ac19-172f99ea40dd)
 
 ### Esse campo apresenta três funcionalidades: ‘Gerar Banco’,’Zerar Banco’ e ‘Sair’; a opção ‘Sair’ apenas encerra a execução do programa de Biblioteca (porém os dados permanecem salvos, não se preocupe), a opção ‘Gerar Banco’ cria um arquivo de texto com a listagem dos dados de todos os livros já cadastrados na biblioteca e salva esse arquivo na mesma pasta em que o programa se encontra, já a opção ‘Zerar Banco’ deve ser evitada ao máximo e só deve ser usada em situações específicas. O cuidado com essa funcionalidade se faz necessário pois ela vai deletar todos os registros do banco de dados de forma permanente, porém só terá êxito caso não hajam livros emprestados. Caso essa função seja ativada uma pasta de backup será criada dentro do mesmo diretório que esse programa se encontra, dentro dessa nova pasta será criado um arquivo de texto com todos os registros que tinham na biblioteca antes da deleção total dos dados.
+
+### Sair:
+![sair](https://github.com/Gustavo-erades/Biblioteca/assets/108373134/bd9bc916-7fcc-4559-a69e-01aa94d8465c)
+
+### Zerar Banco: 
+![zerar](https://github.com/Gustavo-erades/Biblioteca/assets/108373134/d8b6ebae-5909-424b-9320-83d0e48f8d86)
+
+### Gerar Banco:
+![gerar](https://github.com/Gustavo-erades/Biblioteca/assets/108373134/42124d39-8823-4142-a593-ab24c5208d08)
 
 ## Um pouco mais sobre o programa:
 ### *Os Ids são gerados automáticamente, o próprio programa escolhe números aleatórios numa faixa de de 100 a 10000, esse sistema foi feito para facilitar o cadastro dos livros, pois você, como usuário, não precisa se preocupar com os ids. Porém, caso queira personalizar os ids para melhorar sua organização é possível. Basta, ao cadastrar o livro, alterar o campo de 'id do livro'; OBS: os ids podem ter até 5 caracteres e podem conter tanto letras quanto números.
