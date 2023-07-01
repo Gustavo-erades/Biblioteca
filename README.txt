@@ -1,4 +1,4 @@
-#Como a Biblioteca funciona?
+--- Como a Biblioteca funciona? ---
 
 Aba ‘Pesquisar Livo’:
 	Nessa aba serão apresentados todos os livros cadastrados, seu nome, status(alugado ou não), categoria, autor, se foi emprestado, data de entrega e Id (número identificador).
