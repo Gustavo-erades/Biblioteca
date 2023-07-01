@@ -215,7 +215,7 @@ try:
             for i in resultado:
                 lista=(i)
                 with open(""+pastaApp+"\\Consultas_Biblioteca.txt","w",encoding="UTF-8") as f:
-                    f.write("%s(contato:%s) alugou %s(categoria:%s | id:%s) em %s \n\n"%(lista[9],lista[10],lista[0],lista[2],lista[6],lista[4]))
+                    f.write("%s(contato:%s) alugou %s(categoria:%s | id:%s) em %s \n\n"%(lista[3],lista[11],lista[0],lista[2],lista[6],lista[4]))
             mb.showinfo("Consulta feita :)","O arquivo com a lista dos livros alugados está na mesma pasta desse programa ")
         else:
             mb.showerror("ERRO :)","Não há nenhum livro alugado até o momento!")
