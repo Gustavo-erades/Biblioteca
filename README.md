@@ -36,6 +36,8 @@
 ### Conter apenas números, com DD do estado entre parênteses, divido em 2 blocos de números, um com 5 e outro com 4. Ex:(61) 12345-1234; o espaço entre o fechamento do parêntese e início do bloco de números é opcional.
 
 ## Aba ‘Devolução’:
+![Gustavo](https://github.com/Gustavo-erades/Biblioteca/assets/108373134/1d147125-2a28-4c4e-a823-453fc315a34f)
+
 ### Nessa aba será feita a devolução dos livros emprestados. Todos os campos também possuem validação (e seguem as mesmas regas dos campos de mesmo nome da aba ‘Empréstimo’), aqui o campo ‘Nome’ deve ser preenchido exatamente da mesma forma que o mesmo campo foi preenchido no empréstimo, assim como o campo ‘CPF’. O ID do livro deve ser consultado na aba ‘Pesquisar Livro’ e pode conter apenas números, após tudo preenchido e validado a devolução é feita e o status do livro deixa de ser ‘Alugado’.
 
 ## Campo ‘Menu’:
