@@ -1,42 +1,58 @@
 --- Como a Biblioteca funciona? ---
 
-Aba ‘Pesquisar Livo’:
-	Nessa aba serão apresentados todos os livros cadastrados, seu nome, status(alugado ou não), categoria, autor, se foi emprestado, data de entrega e Id (número identificador).
-	Além disso essa aba também apresenta algumas funcionalidades como ‘Consultar’, ‘Gerar consultas’, ‘Excluir Livro’, ’Pesquisar	‘ e ‘Mostrar Todos’.
+Aba â€˜Pesquisar Livoâ€™:
+	Nessa aba serÃ£o apresentados todos os livros cadastrados, seu nome, status(alugado ou nÃ£o), categoria, autor, se foi emprestado, data de entrega e Id (nÃºmero identificador).
+	AlÃ©m disso essa aba tambÃ©m apresenta algumas funcionalidades como â€˜Consultarâ€™, â€˜Gerar consultasâ€™, â€˜Excluir Livroâ€™, â€™Pesquisar	â€˜ e â€˜Mostrar Todosâ€™.
 
 -Consultar:
-	Ao selecionar uma tupla(linha) na caixa dos registros listados e clicar em ‘consultar’ uma nova janela será apresentada mostrando os dados da pessoa que alugou aquele livro.
+	Ao selecionar uma tupla(linha) na caixa dos registros listados e clicar em â€˜consultarâ€™ uma nova janela serÃ¡ apresentada mostrando os dados da pessoa que alugou aquele livro.
 
 -Gerar consultas:
-	Ao clicar nesse botão um arquivo de texto será criado e alocado na mesma pasta que o programa está. Esse arquivo de texto contém os dados de todas as pessoas que estão com livros alugados e também diz que livros são esses.
+	Ao clicar nesse botÃ£o um arquivo de texto serÃ¡ criado e alocado na mesma pasta que o programa estÃ¡. Esse arquivo de texto contÃ©m os dados de todas as pessoas que estÃ£o com livros alugados e tambÃ©m diz que livros sÃ£o esses.
 
 -Excluir livro:
-	Ao selecionar uma tupla(linha) na caixa dos registros listados e clicar em ‘Excluir livro’, o livro selecionado será deletado do banco de dados da Biblioteca. Essa função só será possível caso o livro selecionado não esteja alugado
+	Ao selecionar uma tupla(linha) na caixa dos registros listados e clicar em â€˜Excluir livroâ€™, o livro selecionado serÃ¡ deletado do banco de dados da Biblioteca. Essa funÃ§Ã£o sÃ³ serÃ¡ possÃ­vel caso o livro selecionado nÃ£o esteja alugado
 
 -Pesquisar:
-	O texto digitado na caixa à esquerda será pesquisado por todos os registros existentes
+	O texto digitado na caixa Ã  esquerda serÃ¡ pesquisado por todos os registros existentes
 
 -Mostrar Todos:
-	Todos os registros feitos serão listados.
+	Todos os registros feitos serÃ£o listados.
 ------------------------------------------------------------------
 
-Aba ‘Cadastrar Livo’:
-	Nessa aba será feito o cadastro de todos os livros da Biblioteca; o ‘Nome do livro’ deve começar com letra maiúscula e conter apenas letras, na caixa ‘Selecione a categoria’ inicialmente não apresentará nada, pois nela ficarão todas as categorias que forem cadastradas (para posterior seleção), o campo ‘Autor(a) do livro’ também deve começar com letra maiúscula e conter apenas letras.
-	Uma vez clicado em ‘Cadastrar’ o livro já estará no banco de dados (uma mensagem de sucesso aparecerá para confirmar isso), porém o campo de ‘categoria’ só será atualizado na próxima inicialização do programa. Indo na aba ‘Pesquisasr Livro’ e clicando em ‘Mostrar Todos’ será possível ver os novos registros, porém vale ressaltar que os campos de ‘ID’ das abas ‘Empréstimo’ e ‘Devolução’ também só serão atualizados na próxima inicialização do programa. 
+Aba â€˜Cadastrar Livoâ€™:
+	Nessa aba serÃ¡ feito o cadastro de todos os livros da Biblioteca; o â€˜Nome do livroâ€™ deve conter apenas letras, na caixa â€˜Selecione a categoriaâ€™ inicialmente nÃ£o apresentarÃ¡ nada, pois nela ficarÃ£o todas as categorias que forem cadastradas (para posterior seleÃ§Ã£o), o campo â€˜Autor(a) do livroâ€™ tambÃ©m deve comeÃ§ar com letra maiÃºscula e conter apenas letras.
+	Uma vez clicado em â€˜Cadastrarâ€™ o livro jÃ¡ estarÃ¡ no banco de dados (uma mensagem de sucesso aparecerÃ¡ para confirmar isso), porÃ©m o campo de â€˜categoriaâ€™ sÃ³ serÃ¡ atualizado na prÃ³xima inicializaÃ§Ã£o do programa. Indo na aba â€˜Pesquisasr Livroâ€™ e clicando em â€˜Mostrar Todosâ€™ serÃ¡ possÃ­vel ver os novos registros, porÃ©m vale ressaltar que os campos de â€˜IDâ€™ das abas â€˜EmprÃ©stimoâ€™ e â€˜DevoluÃ§Ã£oâ€™ tambÃ©m sÃ³ serÃ£o atualizados na prÃ³xima inicializaÃ§Ã£o do programa. 
 ------------------------------------------------------------------
 
-Aba ‘Empréstimo’:
-	Nessa aba serão feito os empréstimos dos livros. Todos os campos possuem validação (para que um padrão seja mantido, o que visa facilitar o entendimento) e portanto todos os campos devem seguir essas regras:
+Aba â€˜EmprÃ©stimoâ€™:
+	Nessa aba serÃ£o feito os emprÃ©stimos dos livros. Todos os campos possuem validaÃ§Ã£o (para que um padrÃ£o seja mantido, o que visa facilitar o entendimento) e portanto todos os campos devem seguir essas regras:
 	-Nome:
-		Começa com letra maiúscula e contém apenas letras
+		Conter apenas letras
 	-CPF:
-		Deve estar no padrão: 000.000.000-00, com exatos 11 números, sendo os 6 primeiros separados por um ‘.’ em blocos de 3 números e os 8 últimos separados por ‘-’ em um bloco de três números à esquerda e um bloco de 2 números à direita.
+		Deve estar no padrÃ£o: 000.000.000-00, com exatos 11 nÃºmeros, sendo os 6 primeiros separados por um â€˜.â€™ em blocos de 3 nÃºmeros e os 8 Ãºltimos separados por â€˜-â€™ em um bloco de trÃªs nÃºmeros Ã  esquerda e um bloco de 2 nÃºmeros Ã  direita.
+	-MatrÃ­cula:
+		conter apenas nÃºemeros
 	-Telefone para contato:
-		Conter apenas números, com DD do estado entre parênteses, divido em 2 blocos de números, um com 5 e outro com 4. Ex:(61) 12345-1234; o espaço entre o fechamento do parêntese e início do bloco de números é opcional.
+		Conter apenas nÃºmeros, com DD do estado entre parÃªnteses, divido em 2 blocos de nÃºmeros, um com 5 e outro com 4. Ex:(61) 12345-1234; o espaÃ§o entre o fechamento do parÃªntese e inÃ­cio do bloco de nÃºmeros Ã© opcional.
 ------------------------------------------------------------------
 
-Aba ‘Devolução’:
-	Nessa aba será feita a devolução dos livros emprestados. Todos os campos também possuem validação (e seguem as mesmas regas dos campos de mesmo nome da aba ‘Empréstimo’), aqui o campo ‘Nome’ deve ser preenchido exatamente da mesma forma que o mesmo campo foi preenchido no empréstimo, assim como o campo ‘CPF’. O ID do livro deve ser consultado na aba ‘Pesquisar Livro’ e pode conter apenas números, após tudo preenchido e validado a devolução é feita e o status do livro deixa de ser ‘Alugado’.
+Aba â€˜DevoluÃ§Ã£oâ€™:
+	Nessa aba serÃ¡ feita a devoluÃ§Ã£o dos livros emprestados. Todos os campos tambÃ©m possuem validaÃ§Ã£o (e seguem as mesmas regas dos campos de mesmo nome da aba â€˜EmprÃ©stimoâ€™), aqui o campo â€˜Nomeâ€™ deve ser preenchido exatamente da mesma forma que o mesmo campo foi preenchido no emprÃ©stimo, assim como o campo â€˜CPFâ€™. O ID do livro deve ser consultado na aba â€˜Pesquisar Livroâ€™ e pode conter apenas nÃºmeros, apÃ³s tudo preenchido e validado a devoluÃ§Ã£o Ã© feita e o status do livro deixa de ser â€˜Alugadoâ€™.
 ------------------------------------------------------------------
-Campo ‘Menu’:
-	Esse campo apresenta três funcionalidades: ‘Gerar Banco’,’Zerar Banco’ e ‘Sair’; a opção ‘Sair’ apenas encerra a execução do programa de Biblioteca (porém os dados permanecem salvos, não se preocupe), a opção ‘Gerar Banco’ cria um arquivo de texto com a listagem dos dados de todos os livros já cadastrados na biblioteca e salva esse arquivo na mesma pasta em que o programa se encontra, já a opção ‘Zerar Banco’ deve ser evitada ao máximo e só deve ser usada em situações específicas. O cuidado com essa funcionalidade se faz necessário pois ela vai deletar todos os registros do banco de dados de forma permanente, porém só terá êxito caso não hajam livros emprestados. Caso essa função seja ativada uma pasta de backup será criada dentro do mesmo diretório que esse programa se encontra, dentro dessa nova pasta será criado um arquivo de texto com todos os registros que tinham na biblioteca antes da deleção total dos dados.
+Campo â€˜Menuâ€™:
+	Esse campo apresenta trÃªs funcionalidades: â€˜Gerar Bancoâ€™,â€™Zerar Bancoâ€™ e â€˜Sairâ€™; a opÃ§Ã£o â€˜Sairâ€™ apenas encerra a execuÃ§Ã£o do programa de Biblioteca (porÃ©m os dados permanecem salvos, nÃ£o se preocupe), a opÃ§Ã£o â€˜Gerar Bancoâ€™ cria um arquivo de texto com a listagem dos dados de todos os livros jÃ¡ cadastrados na biblioteca e salva esse arquivo na mesma pasta em que o programa se encontra, jÃ¡ a opÃ§Ã£o â€˜Zerar Bancoâ€™ deve ser evitada ao mÃ¡ximo e sÃ³ deve ser usada em situaÃ§Ãµes especÃ­ficas. O cuidado com essa funcionalidade se faz necessÃ¡rio pois ela vai deletar todos os registros do banco de dados de forma permanente, porÃ©m sÃ³ terÃ¡ Ãªxito caso nÃ£o hajam livros emprestados. Caso essa funÃ§Ã£o seja ativada uma pasta de backup serÃ¡ criada dentro do mesmo diretÃ³rio que esse programa se encontra, dentro dessa nova pasta serÃ¡ criado um arquivo de texto com todos os registros que tinham na biblioteca antes da deleÃ§Ã£o total dos dados.
+
+------------------------------------------------------------------
+Um pouco mais sobre o programa:
+	
+	*Os Ids sÃ£o gerados automÃ¡ticamente, o prÃ³prio programa escolhe nÃºmeros aleatÃ³rios numa faixa de de 100 a 10000, esse sistema foi feito para facilitar o cadastro dos livros, pois vocÃª, como usuÃ¡rio, nÃ£o precisa se preocupar com os ids.
+	PorÃ©m, caso queira personalizar os ids para melhorar sua organizaÃ§Ã£o Ã© possÃ­vel. Basta, ao cadastrar o livro, alterar o campo de 'id do livro'; OBS: os ids podem ter atÃ© 5 caracteres e podem conter tanto letras quanto nÃºmeros.
+	
+	*O campo de CPF e de MatrÃ­cula tÃªm a mesma funÃ§Ã£o (servir de identificador para quem alugou o livro) e por isso caso um esteja preenchido, preencher o outro se torna opcional. O campo de CPF precisa estar no padrÃ£o 000.000.000-00, mas a Ãºnica restriÃ§Ã£o que o campo de matrÃ­cula tem Ã© de poder conter apenas nÃºmeros.
+	
+	*Os campos de datas podem usar como separador a / ou o -, ambos podem ser usados para separara dia, mÃªs e ano.
+	
+	*A pasta desse programa Ã© necessÃ¡ria para seu pleno funcionamento, portanto vocÃª NÃƒO deve retirÃ¡-la do seu computador. Essa pasta tambÃ©m servirÃ¡ como base para o programa. O que significa que quando for necessÃ¡rio gerar uma pasta de backup ou um arquivo txt qualquer, a pasta de destino serÃ¡ a mesma de origem desse programa. Mas, fique a vontade para alocar essa pasta onde preferir ou criar um atalho desse programa. OBS: caso queira abrir o programa clicando em seu Ã­cone porÃ©m fora da pasta de origem, crie um atalho e o aloque onde preferir. 
+
+
