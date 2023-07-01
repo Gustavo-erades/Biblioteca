@@ -27,4 +27,13 @@ def dml(query):#insert, update, delete
         vcon.close()
     except Error as erro:
         print("Erro no Banco de Dados:", erro)
-    
+def delete_livro(query):#deleta livro
+    try:
+        vcon=ConexaoBanco()
+        cursor=vcon.cursor()
+        cursor.execute(query)
+        vcon.commit()
+        vcon.close()
+        return True
+    except Error as erro:
+        print("Erro no Banco de Dados:", erro)
