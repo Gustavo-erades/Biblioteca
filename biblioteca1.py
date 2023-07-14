@@ -37,8 +37,6 @@ try:
         posy= (altura_screen/2)-(altura/2)
         nomeDaJanela.geometry("%dx%d+%d+%d"%(largura,altura,posx,posy))
         nomeDaJanela.resizable(False,False)
-    def semComando():
-        print("sem comando")
     def refresh():
         tk.mainloop()
     def verificacao_sair():
@@ -48,7 +46,6 @@ try:
             mb.showerror("Verificação","Opção de saída cancelada")
     def verificacao_deletar():
         if mb.askyesno("Verificar deleção","Deseja realmente deletar esse livro?"):
-            print("Ainda sem comando :(")
             mb.showinfo("Sucesso :)","Livro deletado da biblioteca!")
         else:
             mb.showerror("Erro :(","Deleção cancelada!")
@@ -105,12 +102,22 @@ try:
                     vid_livro=str(ID_livro.get())
                     vdata_emprestimo=str(data_emprestimo.get())
                     vdata_entrega=str(data_entrega.get())
-                    vquery="INSERT INTO Pessoa(cpf,matricula,id_livro,nome,contato) VALUES('"+vcpf+"','"+vmatricula+"','"+vid_livro+"','"+vnome+"','"+vcontato+"');"
-                    banco.dml(vquery)
-                    #atualiza status do livro emprestado
-                    atualiza_status="UPDATE Livro SET status='Alugado', data_alug='"+vdata_emprestimo+"', data_entrega='"+vdata_entrega+"' WHERE id='"+vid_livro+"';"
-                    banco.dml(atualiza_status)
-                    mb.showinfo("Sucesso :)","%s tem até %s para entregar o livro!"%(vnome,vdata_entrega))
+                    
+                    
+                    verifica_emprestimo="SELECT status FROM Livro WHERE id='"+vid_livro+"'"
+                    if(str(banco.dql(verifica_emprestimo))!="[('Alugado',)]"):
+                        vquery="INSERT INTO Pessoa(cpf,matricula,id_livro,nome,contato) VALUES('"+vcpf+"','"+vmatricula+"','"+vid_livro+"','"+vnome+"','"+vcontato+"');"
+                        banco.dml(vquery)
+                        #atualiza status do livro emprestado
+                        atualiza_status="UPDATE Livro SET status='Alugado', data_alug='"+vdata_emprestimo+"', data_entrega='"+vdata_entrega+"' WHERE id='"+vid_livro+"';"
+                        banco.dml(atualiza_status)
+                        mb.showinfo("Sucesso :)","%s tem até %s para entregar o livro!"%(vnome,vdata_entrega))
+                    else:
+                        verifica_dataEmprestimo="SELECT data_alug FROM Livro WHERE id='"+vid_livro+"'"
+                        data=str(banco.dql(verifica_dataEmprestimo))  
+                        chars = ['[', ']','(',')',',']
+                        res = data.translate(str.maketrans('', '', ''.join(chars))) 
+                        mb.showwarning("Erro :(","Este livro foi alugado em '"+res+"' e ainda não foi devolvido!")
                     #limpa os campos referentes a pessoa
                     Nome_pessoa.delete(0,len(vnome))
                     cpf_pessoa.delete(0,len(vcpf))
@@ -150,7 +157,6 @@ try:
                     mb.showerror("Erro!","Não há livros cadastrados na biblioteca ainda!") 
             else:
                 mb.showerror("Erro!","Há ao menos um livro ainda não devolvido. Por isso os registros da biblioteca não podem ser zerados!")   
-                print(garantia)
         else:
             mb.showinfo("Operação cancelada!","A operação de 'Zerar banco' foi cancelada!")
     def janela_devolucao():
@@ -212,8 +218,7 @@ try:
             for i in resultado:
                 lista=(i)
                 with open(""+pastaApp+"\\Consultas_Biblioteca.txt","w",encoding="UTF-8") as f:
-                    f.write("%s(contato:%s) alugou %s(categoria:%s | id:%s) em %s \n\n"%(lista[3],lista[11],lista[0],lista[2],lista[6],lista[4]))
-            print(lista)
+                    f.write("%s(contato:%s) alugou %s(categoria:%s | id:%s) em %s \n\n"%(lista[10],lista[11],lista[0],lista[2],lista[6],lista[4]))
             mb.showinfo("Consulta feita :)","O arquivo com a lista dos livros alugados está na mesma pasta desse programa ")
         else:
             mb.showerror("ERRO :)","Não há nenhum livro alugado até o momento!")
@@ -227,6 +232,8 @@ try:
                     f.write("Livro:%s | Categoria:%s | Autor:%s | ID:%s"%(lista[0],lista[2],lista[3],lista[6]))
                     f.write("\n\n")
             mb.showinfo("Banco gerado com sucesso :)","O arquivo com a lista dos livros cadastrados está na mesma pasta desse programa ")      
+        else:
+            mb.showerror("Erro :(","Não há livros cadastrados na biblioteca ainda!")
     def Deleta_Livro():
         try:
             livroSelecionado=tv.selection()
@@ -348,6 +355,7 @@ try:
     tk.Button(quadroGrid,text="Consultar",pady=1,command=QuemAlugou,bg="#363636",fg="#fff",font="Arial 12 bold").pack(side="left",padx=5)
     tk.Button(quadroGrid,text="Gerar consultas",pady=1,command=gerarConsultas,bg="#363636",fg="#fff",font="Arial 12 bold").pack(side="left",padx=5)
     tk.Button(quadroGrid,text="Excluir Livro",pady=1,command=Deleta_Livro,bg="#363636",fg="#fff",font="Arial 12 bold").pack(side="left",padx=5)
+    tk.Button(quadroGrid,text="recarregar",pady=1,command=popularGrid,bg="#363636",fg="#fff",font="Arial 12 bold").pack(side="right",padx=5)
     #campo de pesquisa
     quadroPesquisa=tk.LabelFrame(pesquisar_aba,text="Procurar")
     quadroPesquisa.pack(fill="both",expand="yes",padx=10,pady=10)
