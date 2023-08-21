@@ -52,25 +52,30 @@ try:
     #conteúdo das abas
     def popularGrid():
         tv.delete(*tv.get_children())
-        vquery="SELECT * FROM Livro ORDER BY id"
+        vquery="SELECT * FROM Livro ORDER BY nome ASC"
         linhas=banco.dql(vquery)
         for i in linhas:
             tv.insert("","end",values=i)
     def procurar():
         tv.delete(*tv.get_children())
-        vquery="SELECT * FROM Livro WHERE (nome LIKE '%"+str(pesquisar.get())+"%') OR (status LIKE '%"+str(pesquisar.get())+"%') OR (categoria LIKE '%"+str(pesquisar.get())+"%') OR (autor LIKE '%"+str(pesquisar.get())+"%') OR (data_alug LIKE '%"+str(pesquisar.get())+"%') OR (data_entrega LIKE '%"+str(pesquisar.get())+"%') OR (id LIKE '%"+str(pesquisar.get())+"%') ORDER BY id"
+        vquery="SELECT * FROM Livro WHERE (nome LIKE '%"+str(pesquisar.get())+"%') OR (status LIKE '%"+str(pesquisar.get())+"%') OR (categoria LIKE '%"+str(pesquisar.get())+"%') OR (autor LIKE '%"+str(pesquisar.get())+"%') OR (data_alug LIKE '%"+str(pesquisar.get())+"%') OR (data_entrega LIKE '%"+str(pesquisar.get())+"%') OR (id LIKE '%"+str(pesquisar.get())+"%') ORDER BY nome ASC"
         linhas=banco.dql(vquery)
         for i in linhas:
             tv.insert("","end",values=i)
-    val=randint(100,10000)
     def cont_abaCadastro():
         if (Nome.get()!="" and categoria.get()!="" and autor.get()!=""):
             if(regex_biblioteca.validanome(autor.get()) and regex_biblioteca.validacategoriaLivro(categoria.get().strip('{').strip('}'))): 
                 vnome=str(Nome.get())
                 vcategoria=str(categoria.get().strip('{').strip('}'))
                 vautor=str(autor.get())
-                vquery="INSERT INTO Livro(nome,categoria,autor,id) VALUES('"+vnome+"','"+vcategoria+"','"+vautor+"','"+str(val)+"');"
-                banco.dml(vquery)
+                if(quant.get()!=""):
+                    vquant=int(quant.get())
+                else:
+                    vquant=1
+                for unidade in range(0,vquant,1):
+                    val=randint(100,10000)
+                    vquery="INSERT INTO Livro(nome,categoria,autor,id) VALUES('"+vnome+"','"+vcategoria+"','"+vautor+"','"+str(val)+"');"
+                    banco.dml(vquery)
                 mb.showinfo("Sucesso :)","Livro cadastrado com sucesso!\n\n*OBS: caso tenha sido cadastrado uma nova categoria ela estará disponível na próxima inicialização do programa, assim como o número ID do livro cadastrado.*")
                 Nome.delete(0,len(vnome))
                 categoria.delete(0,len(vcategoria))
@@ -102,8 +107,6 @@ try:
                     vid_livro=str(ID_livro.get())
                     vdata_emprestimo=str(data_emprestimo.get())
                     vdata_entrega=str(data_entrega.get())
-                    
-                    
                     verifica_emprestimo="SELECT status FROM Livro WHERE id='"+vid_livro+"'"
                     if(str(banco.dql(verifica_emprestimo))!="[('Alugado',)]"):
                         vquery="INSERT INTO Pessoa(cpf,matricula,id_livro,nome,contato) VALUES('"+vcpf+"','"+vmatricula+"','"+vid_livro+"','"+vnome+"','"+vcontato+"');"
@@ -138,7 +141,7 @@ try:
             comando_garantia="SELECT * FROM Livro WHERE status='Alugado'"
             garantia=banco.dml(comando_garantia)
             if garantia==[] or garantia==None:
-                comando_sensatoLivro="SELECT * FROM Livro ORDER BY ID"
+                comando_sensatoLivro="SELECT * FROM Livro ORDER BY nome ASC"
                 resultado_sensatoLivro=banco.dql(comando_sensatoLivro)
                 if(resultado_sensatoLivro!=[]):  
                     os.mkdir(pastaApp+"\\Biblioteca_backup") 
@@ -223,7 +226,7 @@ try:
         else:
             mb.showerror("ERRO :)","Não há nenhum livro alugado até o momento!")
     def GerarBancoTxt():
-        queryBancoLivros="SELECT * FROM Livro ORDER BY id"
+        queryBancoLivros="SELECT * FROM Livro ORDER BY nome ASC"
         resultadoTodos=banco.dql(queryBancoLivros)
         if(resultadoTodos!=[]):
             for i in resultadoTodos:
@@ -385,6 +388,10 @@ try:
     autor=tk.Entry(quadroCadastro,width=50)
     tk.Label(quadroCadastro,text="Autor(a) do livro",font="Arial 12 bold").pack()
     autor.pack()
+    #Nº de unidades
+    quant=tk.Entry(quadroCadastro, width=20)
+    tk.Label(quadroCadastro,text="Nº de unidades",font="Arial 12 bold").pack()
+    quant.pack()
     #botão de cadastro
     tk.Button(quadroCadastro,text="Cadastrar",pady=1,command=cont_abaCadastro,bg="#363636",fg="#fff",font="Arial 12 bold").pack(side="bottom",pady=8)
     #conteúdo aba de empréstimo
