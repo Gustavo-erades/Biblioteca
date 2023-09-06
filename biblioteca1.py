@@ -7,6 +7,7 @@ import os
 from random import *
 import banco
 import regex_biblioteca
+import re
 #abre o banco de dados e cria as tabelas
 try:
     pastaApp=os.path.dirname(__file__)
@@ -95,7 +96,11 @@ try:
                     #pega nome, cpf e contato da pessoa
                     vnome=str(Nome_pessoa.get())
                     if cpf_pessoa.get()!='':
-                        vcpf=str(cpf_pessoa.get())
+                        if len(cpf_pessoa.get())==11:
+                            cpf = cpf_pessoa.get()[:3] + "." + cpf_pessoa.get()[3:6] + "." + cpf_pessoa.get()[6:9] + "-" + cpf_pessoa.get()[9:]
+                            vcpf=str(cpf)
+                        else:
+                            vcpf=str(cpf_pessoa.get())
                     else:
                         vcpf='---'
                     if matricula.get()!='':
@@ -103,7 +108,14 @@ try:
                     else:
                         vmatricula='---'
                     vmatricula=str(matricula.get())
-                    vcontato=str(contato_pessoa.get())
+                    if(len(contato_pessoa.get())==11):
+                        contato="("+ contato_pessoa.get()[:2]+")"+contato_pessoa.get()[2:7]+"-"+contato_pessoa.get()[7:]
+                        vcontato=str(contato)
+                    elif(len(contato_pessoa.get())==9):
+                        contato=contato_pessoa.get()[:5]+"-"+contato_pessoa.get()[5:]
+                        vcontato=str(contato)
+                    else:
+                        vcontato=str(contato_pessoa.get())
                     vid_livro=str(ID_livro.get())
                     vdata_emprestimo=str(data_emprestimo.get())
                     vdata_entrega=str(data_entrega.get())
@@ -145,7 +157,7 @@ try:
                 resultado_sensatoLivro=banco.dql(comando_sensatoLivro)
                 if(resultado_sensatoLivro!=[]):  
                     os.mkdir(pastaApp+"\\Biblioteca_backup") 
-                    with open(""+pastaApp+"\\Biblioteca_backup\\backup_Livros_Registrados.txt","w",encoding="UTF-8") as f:
+                    with open(""+pastaApp+"\\Biblioteca_backup\\backup_Livros_Registrados.txt","w+",encoding="UTF-8") as f:
                             f.write("\t--- BACKUP DOS LIVROS CADASTRADOS ---\n\n")
                             for i in resultado_sensatoLivro:
                                 lista_populaArq=(i)
@@ -435,7 +447,6 @@ try:
     data_entrega.pack(padx=8,pady=8,side="left")
     #botao
     tk.Button(Emprestar_aba,text="Emprestar",command=cont_abaEmprestar,bg="#363636",fg="#fff",font="Arial 12 bold").pack(pady=8,side="bottom")
-    
     #aba de devolução
     #criação da janela de devolução
     quadroDevolveLivro=tk.LabelFrame(devolucao_aba,text="Devolução de Livro")
