@@ -1,7 +1,7 @@
 import re
 def validatelefone(telefone):
     target=telefone
-    pattern=re.compile("^\([0-9]{2}\)[\s\S]?[0-9]{5}[\-]?[0-9]{4}$")
+    pattern=re.compile("^\(?[0-9]{0,2}\)?[\s\S]?[0-9]{5}[\-]?[0-9]{4}$")
     match= re.fullmatch(pattern,target)
     if(match!=None):
         return True
@@ -49,7 +49,7 @@ def validacategoriaLivro(categoria):
         return False
 def validadata(data):
     target=data
-    pattern=re.compile("[0-9]{2}[/-][0-9]{2}[/-][0-9]{4}")
+    pattern=re.compile("[0-9]{1,2}[/-][0-9]{1,2}[/-][0-9]{4}")
     match= re.fullmatch(pattern,target)
     if(match!=None):
         return True
