@@ -77,14 +77,14 @@
 ![gerar](https://github.com/Gustavo-erades/Biblioteca/assets/108373134/42124d39-8823-4142-a593-ab24c5208d08)
 
 ## Um pouco mais sobre o programa:
-#### *Os Ids são gerados automáticamente, o próprio programa escolhe números aleatórios numa faixa de de 100 a 10000, esse sistema foi feito para facilitar o cadastro dos livros, pois você, como usuário, não precisa se preocupar com os ids. Porém, caso queira personalizar os ids para melhorar sua organização é possível. Basta, ao cadastrar o livro, alterar o campo de 'id do livro'; OBS: os ids podem ter até 5 caracteres e podem conter tanto letras quanto números.
+#### -Os Ids são gerados automáticamente, o próprio programa escolhe números aleatórios numa faixa de de 100 a 10000, esse sistema foi feito para facilitar o cadastro dos livros, pois você, como usuário, não precisa se preocupar com os ids. Porém, caso queira personalizar os ids para melhorar sua organização é possível. Basta, ao cadastrar o livro, alterar o campo de 'id do livro'; OBS: os ids podem ter até 5 caracteres e podem conter tanto letras quanto números.
 
-#### *O campo de CPF e de Matrícula têm a mesma função (servir de identificador para quem alugou o livro) e por isso caso um esteja preenchido, preencher o outro se torna opcional. O campo de CPF precisa estar no padrão 000.000.000-00, mas a única restrição que o campo de matrícula tem é de poder conter apenas números.
+#### -O campo de CPF e de Matrícula têm a mesma função (servir de identificador para quem alugou o livro) e por isso caso um esteja preenchido, preencher o outro se torna opcional. O campo de CPF precisa estar no padrão 000.000.000-00, mas a única restrição que o campo de matrícula tem é de poder conter apenas números.
 
-#### *Os campos de datas podem usar como separador a '/' ou '-', ambos podem ser usados para separara dia, mês e ano.
+#### -Os campos de datas podem usar como separador a '/' ou '-', ambos podem ser usados para separara dia, mês e ano.
 
-#### *O arquivo "Biblioteca.rar" possui uma pasta compactada com um executável do programa para que ele possa ser utilizado.
+#### -O arquivo "Biblioteca.rar" possui uma pasta compactada com um executável do programa para que ele possa ser utilizado.
 
-#### *ATENÇÃO:
+#### ATENÇÃO:
 >A pasta desse programa é necessária para seu pleno funcionamento, portanto você NÃO deve retirá-la do seu computador. Essa pasta também servirá como base para o programa. O que significa que quando for necessário gerar uma pasta de backup ou um arquivo txt qualquer, a pasta de destino será a mesma de origem desse programa. Mas, fique a vontade para alocar essa pasta onde preferir ou criar um atalho desse programa. OBS: caso queira abrir o programa clicando em seu ícone porém fora da pasta de origem, crie um atalho e o aloque onde preferir.
 
