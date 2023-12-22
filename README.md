@@ -86,5 +86,5 @@
 #### *O arquivo "Biblioteca.rar" possui uma pasta compactada com um executável do programa para que ele possa ser utilizado.
 
 #### *ATENÇÃO:
-`A pasta desse programa é necessária para seu pleno funcionamento, portanto você NÃO deve retirá-la do seu computador. Essa pasta também servirá como base para o programa. O que significa que quando for necessário gerar uma pasta de backup ou um arquivo txt qualquer, a pasta de destino será a mesma de origem desse programa. Mas, fique a vontade para alocar essa pasta onde preferir ou criar um atalho desse programa. OBS: caso queira abrir o programa clicando em seu ícone porém fora da pasta de origem, crie um atalho e o aloque onde preferir.`
+>A pasta desse programa é necessária para seu pleno funcionamento, portanto você NÃO deve retirá-la do seu computador. Essa pasta também servirá como base para o programa. O que significa que quando for necessário gerar uma pasta de backup ou um arquivo txt qualquer, a pasta de destino será a mesma de origem desse programa. Mas, fique a vontade para alocar essa pasta onde preferir ou criar um atalho desse programa. OBS: caso queira abrir o programa clicando em seu ícone porém fora da pasta de origem, crie um atalho e o aloque onde preferir.
 
