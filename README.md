@@ -1,3 +1,7 @@
+# Como usar?
+- Baixe o arquivo `.rar` e extraia seus arquivos. Dentre os arquivos execute a aplicação em `Biblioteca.exe`, pronto! divirta-se.
+> Talvez seja preciso fornecer permissão de administrador do sistema para executar o arquivo.
+> As pastas de backup e demais arquivos `.txt` serão gerados na pasta padrão (aquela que foi extraída após o download). 
 # Como a Biblioteca funciona?
 ## Aba ‘Pesquisar Livo’:
 ![aba_pesquisar](https://github.com/Gustavo-erades/Biblioteca/assets/108373134/a919fc41-f7b5-49da-8a62-145ae3f8cd3b)
